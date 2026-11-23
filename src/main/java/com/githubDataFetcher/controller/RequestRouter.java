@@ -1,4 +1,3 @@
-
 package com.githubDataFetcher.controller;
 
 import java.net.URI;
@@ -21,8 +20,8 @@ import com.githubDataFetcher.service.ResponseReader;
 @RequestMapping("/GithubApi")
 public class RequestRouter {
 
-    private final HttpClient client;
-    private final ResponseReader responseReader;
+    HttpClient client;
+    ResponseReader responseReader;
 
     public RequestRouter() {
         this.client = HttpClient.newHttpClient();
@@ -31,43 +30,27 @@ public class RequestRouter {
 
     @GetMapping("/getUsersData/{username}")
     public ResponseEntity<GitUserDTO> getUsersData(
-            @PathVariable("username") String username) {
+            @PathVariable String username) {
 
         String url = "https://api.github.com/users/";
         String uri = url + username;
 
+        String response = "";
+
         try {
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(uri))
-                    .header("Accept", "application/vnd.github+json")
-                    .header("User-Agent", "GitHubDataFetcher")
                     .GET()
                     .build();
 
-            HttpResponse<String> apiResponse = client.send(
-                    request,
-                    HttpResponse.BodyHandlers.ofString()
-            );
-
-            System.out.println("Status Code: " + apiResponse.statusCode());
-
-            if (apiResponse.statusCode() != 200) {
-                return ResponseEntity
-                        .status(apiResponse.statusCode())
-                        .build();
-            }
-
-            String response = apiResponse.body();
-
+            HttpResponse<String> apiResponse = client.send(request,HttpResponse.BodyHandlers.ofString());
+            System.out.println("Status Code : " + apiResponse.statusCode());
+            response = apiResponse.body() != null ? apiResponse.body(): "null";
             GitUserDTO opData = responseReader.readUserData(response);
-
             return ResponseEntity.ok(opData);
-
         } catch (Exception e) {
-            System.out.println(
-                    "Error fetching user details: " + e.getMessage()
-            );
-
+            System.out.println( "Error fetching user details : " + e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
