@@ -1,7 +1,10 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #c1c1eb;
+  background-color: #f3b9b9;
   color: #333;
   text-align: center;
   margin-top: 50px;
+}
+p{
+  color:blue;
 }
