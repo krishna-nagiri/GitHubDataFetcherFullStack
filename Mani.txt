@@ -1,1 +1,8 @@
-hello team
+
+<<<<<<< HEAD
+Hi team
+=======
+
+
+hello team how are you
+>>>>>>> main
