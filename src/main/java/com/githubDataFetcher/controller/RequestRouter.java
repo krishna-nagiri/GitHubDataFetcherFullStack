@@ -27,11 +27,13 @@ public class RequestRouter {
         this.client = HttpClient.newHttpClient();
         this.responseReader = new ResponseReader();
     }
-
+    @GetMapping("/TestAPI")
+    public ResponseEntity<GitUserDTO> getTestResult(){
+    	System.out.println("Pinged this API");
+    	return ResponseEntity.ok(new GitUserDTO());
+    }
     @GetMapping("/getUsersData/{username}")
-    public ResponseEntity<GitUserDTO> getUsersData(
-            @PathVariable String username) {
-
+    public ResponseEntity<GitUserDTO> getUsersData(@PathVariable("username") String username) {
         String url = "https://api.github.com/users/";
         String uri = url + username;
 
